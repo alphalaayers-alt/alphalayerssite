@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight, Mail, Phone, MapPin, Linkedin, Twitter, Facebook, Instagram } from 'lucide-react';
 import { Logo } from './Logo';
+import { submitForm } from '../lib/submit-form';
 
 interface FooterProps {
   onOpenQuote: () => void;
@@ -10,9 +11,25 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onOpenQuote, setActivePage }) => {
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
   const handleNav = (page: string) => {
     setActivePage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNewsletter = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail.trim()) return;
+
+    const result = await submitForm('newsletter', { email: newsletterEmail.trim() });
+    if (result.success) {
+      setNewsletterStatus('success');
+      setNewsletterEmail('');
+    } else {
+      setNewsletterStatus('error');
+    }
   };
 
   return (
@@ -85,18 +102,32 @@ export const Footer: React.FC<FooterProps> = ({ onOpenQuote, setActivePage }) =>
             <p className="text-xs text-slate-400 leading-snug">
               Subscribe to get the latest tech insights, software architecture updates, and cloud security trends.
             </p>
-            <form onSubmit={(e) => e.preventDefault()} className="flex items-center gap-2 pt-1">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#2563eb]"
-              />
-              <button
-                type="submit"
-                className="w-9 h-9 rounded-full bg-[#2563eb] text-white flex items-center justify-center flex-shrink-0 hover:bg-[#1d4ed8] transition-colors cursor-pointer"
-              >
-                <ArrowRight className="w-4 h-4" />
-              </button>
+            <form onSubmit={handleNewsletter} className="space-y-2 pt-1">
+              <div className="flex items-center gap-2">
+                <input
+                  type="email"
+                  required
+                  placeholder="Enter your email"
+                  value={newsletterEmail}
+                  onChange={(e) => {
+                    setNewsletterEmail(e.target.value);
+                    setNewsletterStatus('idle');
+                  }}
+                  className="w-full bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#2563eb]"
+                />
+                <button
+                  type="submit"
+                  className="w-9 h-9 rounded-full bg-[#2563eb] text-white flex items-center justify-center flex-shrink-0 hover:bg-[#1d4ed8] transition-colors cursor-pointer"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+              {newsletterStatus === 'success' && (
+                <p className="text-xs text-green-400">Subscribed successfully!</p>
+              )}
+              {newsletterStatus === 'error' && (
+                <p className="text-xs text-red-400">Failed to subscribe. Try again.</p>
+              )}
             </form>
           </div>
 

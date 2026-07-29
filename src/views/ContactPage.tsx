@@ -2,14 +2,27 @@
 
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle2 } from 'lucide-react';
+import { submitForm } from '../lib/submit-form';
 
 export const ContactPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setSubmitError('');
+
+    const result = await submitForm('contact', form);
+
+    setSubmitting(false);
+    if (result.success) {
+      setSubmitted(true);
+    } else {
+      setSubmitError(result.error || 'Failed to send message. Please try again.');
+    }
   };
 
   return (
@@ -142,11 +155,13 @@ export const ContactPage: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-[#2563eb] text-white font-bold py-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#1d4ed8] transition-all cursor-pointer shadow-lg text-sm"
+                  disabled={submitting}
+                  className="w-full bg-[#2563eb] text-white font-bold py-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#1d4ed8] transition-all cursor-pointer shadow-lg text-sm disabled:opacity-60"
                 >
-                  <span>Send Message Now</span>
+                  <span>{submitting ? 'Sending...' : 'Send Message Now'}</span>
                   <Send className="w-4 h-4" />
                 </button>
+                {submitError && <p className="text-xs text-red-400 text-center">{submitError}</p>}
               </form>
             ) : (
               <div className="py-12 text-center space-y-4">

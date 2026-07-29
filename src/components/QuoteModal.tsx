@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, CheckCircle2, ArrowRight } from 'lucide-react';
+import { submitForm } from '../lib/submit-form';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -9,6 +10,8 @@ interface QuoteModalProps {
 
 export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, defaultService = 'Financial Consulting' }) => {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -19,9 +22,19 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, default
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setSubmitError('');
+
+    const result = await submitForm('quote', formData);
+
+    setSubmitting(false);
+    if (result.success) {
+      setSubmitted(true);
+    } else {
+      setSubmitError(result.error || 'Failed to submit. Please try again.');
+    }
   };
 
   const handleReset = () => {
@@ -121,11 +134,13 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, default
 
               <button
                 type="submit"
-                className="w-full bg-[#2563eb] text-white font-bold py-3.5 rounded-full flex items-center justify-center gap-2 hover:bg-[#1d4ed8] transition-all cursor-pointer shadow-lg"
+                disabled={submitting}
+                className="w-full bg-[#2563eb] text-white font-bold py-3.5 rounded-full flex items-center justify-center gap-2 hover:bg-[#1d4ed8] transition-all cursor-pointer shadow-lg disabled:opacity-60"
               >
-                <span>Submit Quote Request</span>
+                <span>{submitting ? 'Submitting...' : 'Submit Quote Request'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
+              {submitError && <p className="text-xs text-red-400 text-center">{submitError}</p>}
             </form>
           </div>
         ) : (
