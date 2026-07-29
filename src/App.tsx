@@ -6,13 +6,13 @@ import { VideoModal } from './components/VideoModal';
 import { FAQSection } from './components/FAQSection';
 
 // Pages
-import { HomePage } from './pages/HomePage';
-import { AboutPage } from './pages/AboutPage';
-import { ServicesPage } from './pages/ServicesPage';
-import { ProductsPage } from './pages/ProductsPage';
-import { ProjectsPage } from './pages/ProjectsPage';
-import { BlogPage } from './pages/BlogPage';
-import { ContactPage } from './pages/ContactPage';
+import { HomePage } from './views/HomePage';
+import { AboutPage } from './views/AboutPage';
+import { ServicesPage } from './views/ServicesPage';
+import { ProductsPage } from './views/ProductsPage';
+import { ProjectsPage } from './views/ProjectsPage';
+import { BlogPage } from './views/BlogPage';
+import { ContactPage } from './views/ContactPage';
 
 export default function App() {
   const [activePage, setActivePage] = useState<string>('home');

@@ -70,11 +70,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenQuote, setActivePage }) =>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-[#2563eb] flex-shrink-0" />
-                <span>+1 (800) 458-9743</span>
+                <span>+91 9635301453</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-[#2563eb] flex-shrink-0" />
-                <span>contact@alphalayers.com</span>
+                <span>alphalaayers@gmail.com</span>
               </li>
             </ul>
           </div>
