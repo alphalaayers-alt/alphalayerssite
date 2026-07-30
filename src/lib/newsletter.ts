@@ -1,3 +1,4 @@
+import { readServerEnv } from './server-env';
 import { createId, readJsonFile, writeJsonFile } from './storage';
 import { getSupabase, isSupabaseEnabled } from './supabase/client';
 
@@ -362,7 +363,9 @@ export function getNewsletterStatus() {
   return {
     mode: isDemoMode() ? 'demo' : 'live',
     storage: isSupabaseEnabled() ? 'supabase' : 'local-json',
-    supabaseReady: Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY),
+    supabaseReady: Boolean(
+      readServerEnv('SUPABASE_URL') && readServerEnv('SUPABASE_SERVICE_ROLE_KEY')
+    ),
     resendReady: Boolean(process.env.RESEND_API_KEY),
   };
 }
