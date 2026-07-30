@@ -1,13 +1,19 @@
+'use client';
+
 import React, { useState } from 'react';
 import { ArrowUpRight, Clock, Calendar, User, X } from 'lucide-react';
-import { blogPostsData } from '../data/mockData';
 import { BlogPost } from '../types';
+import { useBlogPosts } from '../lib/use-blog-posts';
+import { useSiteContent } from './SiteContentProvider';
 
 interface BlogSectionProps {
   onViewAllBlogs?: () => void;
 }
 
 export const BlogSection: React.FC<BlogSectionProps> = ({ onViewAllBlogs }) => {
+  const posts = useBlogPosts();
+  const { content } = useSiteContent();
+  const section = content.home.blogSection;
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
   return (
@@ -18,13 +24,13 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onViewAllBlogs }) => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
             <span className="bg-[#2563eb]/20 text-[#3b82f6] text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider inline-block">
-              Latest Insights & Blogs
+              {section.badge}
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
-              Thought Leadership In IT & Financial Technology
+              {section.headline}
             </h2>
             <p className="text-slate-400 text-sm leading-relaxed">
-              Stay ahead of industry shifts with expert market analysis, engineering guides, and strategic commentary from Optibiz.
+              {section.description}
             </p>
           </div>
 
@@ -33,7 +39,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onViewAllBlogs }) => {
               onClick={onViewAllBlogs}
               className="bg-[#18232c] hover:bg-white/10 text-[#3b82f6] border border-[#2563eb]/40 font-bold px-6 py-3 rounded-full text-xs sm:text-sm flex items-center gap-2 transition-all self-start md:self-auto cursor-pointer"
             >
-              <span>Explore All Articles</span>
+              <span>{section.viewAllLabel}</span>
               <ArrowUpRight className="w-4 h-4" />
             </button>
           )}
@@ -41,7 +47,7 @@ export const BlogSection: React.FC<BlogSectionProps> = ({ onViewAllBlogs }) => {
 
         {/* Blog Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {blogPostsData.map((post) => (
+          {posts.slice(0, 3).map((post) => (
             <article
               key={post.id}
               onClick={() => setSelectedPost(post)}

@@ -3,8 +3,11 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle2 } from 'lucide-react';
 import { submitForm } from '../lib/submit-form';
+import { useSiteContent } from '../components/SiteContentProvider';
 
 export const ContactPage: React.FC = () => {
+  const { content } = useSiteContent();
+  const page = content.pages.contact;
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
@@ -28,30 +31,19 @@ export const ContactPage: React.FC = () => {
   return (
     <div className="bg-[#0d151c] text-white py-16 px-4 sm:px-8 lg:px-12 space-y-16 animate-in fade-in duration-300">
       <div className="max-w-[1500px] mx-auto space-y-12">
-        
-        {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <span className="bg-[#2563eb]/20 text-[#3b82f6] text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider inline-block">
-            Get In Touch
+            {page.badge}
           </span>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-            Connect With Our Global Advisors
-          </h1>
-          <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-            Have a project in mind, need custom IT solutions, or looking for strategic financial advisory? We are here to answer your inquiries.
-          </p>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">{page.headline}</h1>
+          <p className="text-slate-400 text-base sm:text-lg leading-relaxed">{page.description}</p>
         </div>
 
-        {/* Contact Info & Form Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
-          {/* Contact Details */}
           <div className="lg:col-span-5 space-y-8 bg-[#131e28] border border-white/10 p-8 rounded-3xl shadow-xl">
             <div>
-              <h2 className="text-2xl font-bold text-white mb-2">Optibiz Global Headquarters</h2>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Our team operates across North America, Europe, and Asia Pacific to provide 24/7 IT support and strategic consulting.
-              </p>
+              <h2 className="text-2xl font-bold text-white mb-2">{page.hqTitle}</h2>
+              <p className="text-xs text-slate-400 leading-relaxed">{page.hqBlurb}</p>
             </div>
 
             <div className="space-y-6 pt-2">
@@ -61,7 +53,7 @@ export const ContactPage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-white">Office Location</h4>
-                  <p className="text-xs text-slate-300">124 Financial Plaza, Wall Street, New York, NY 10005</p>
+                  <p className="text-xs text-slate-300">{page.address}</p>
                 </div>
               </div>
 
@@ -71,7 +63,7 @@ export const ContactPage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-white">Direct Phone Lines</h4>
-                  <p className="text-xs text-slate-300">+91 9635301453</p>
+                  <p className="text-xs text-slate-300">{page.phone}</p>
                 </div>
               </div>
 
@@ -81,7 +73,7 @@ export const ContactPage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-white">Email Addresses</h4>
-                  <p className="text-xs text-slate-300">alphalaayers@gmail.com</p>
+                  <p className="text-xs text-slate-300">{page.email}</p>
                 </div>
               </div>
 
@@ -91,13 +83,12 @@ export const ContactPage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-white">Business Hours</h4>
-                  <p className="text-xs text-slate-300">Monday - Friday: 8:00 AM - 7:00 PM EST</p>
+                  <p className="text-xs text-slate-300">{page.hours}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Form */}
           <div className="lg:col-span-7 bg-[#131e28] border border-white/10 p-8 rounded-3xl shadow-xl">
             {!submitted ? (
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -158,7 +149,7 @@ export const ContactPage: React.FC = () => {
                   disabled={submitting}
                   className="w-full bg-[#2563eb] text-white font-bold py-4 rounded-full flex items-center justify-center gap-2 hover:bg-[#1d4ed8] transition-all cursor-pointer shadow-lg text-sm disabled:opacity-60"
                 >
-                  <span>{submitting ? 'Sending...' : 'Send Message Now'}</span>
+                  <span>{submitting ? 'Sending...' : page.submitLabel}</span>
                   <Send className="w-4 h-4" />
                 </button>
                 {submitError && <p className="text-xs text-red-400 text-center">{submitError}</p>}
@@ -168,9 +159,10 @@ export const ContactPage: React.FC = () => {
                 <div className="w-16 h-16 rounded-full bg-[#2563eb] text-white flex items-center justify-center mx-auto shadow-xl">
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Message Delivered!</h3>
+                <h3 className="text-2xl font-bold text-white">{page.successTitle}</h3>
                 <p className="text-xs text-slate-300 max-w-sm mx-auto">
-                  Thank you, <span className="text-[#3b82f6] font-semibold">{form.name}</span>. An Optibiz executive consultant will respond to your message shortly.
+                  {page.successBody}{' '}
+                  <span className="text-[#3b82f6] font-semibold">{form.name}</span>
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
@@ -181,9 +173,7 @@ export const ContactPage: React.FC = () => {
               </div>
             )}
           </div>
-
         </div>
-
       </div>
     </div>
   );

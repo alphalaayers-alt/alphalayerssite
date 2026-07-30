@@ -1,59 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { ChevronDown, Search, HelpCircle, MessageSquare, ArrowRight, Sparkles } from 'lucide-react';
-
-interface FAQItem {
-  id: string;
-  question: string;
-  answer: string;
-  category: string;
-}
-
-export const faqData: FAQItem[] = [
-  {
-    id: 'faq-1',
-    category: 'IT Services',
-    question: 'What core IT services does Alpha Layers provide?',
-    answer: 'Alpha Layers specializes in end-to-end IT services including enterprise software development, cloud infrastructure management, cyber security auditing, custom web/mobile app engineering, and operational IT consulting.',
-  },
-  {
-    id: 'faq-2',
-    category: 'Custom Software',
-    question: 'How do you handle custom software development projects?',
-    answer: 'We follow an agile, full-lifecycle engineering process: discovery & architecture design, rapid MVP prototyping, full-stack development with rigorous CI/CD automation, and post-launch maintenance & scaling support.',
-  },
-  {
-    id: 'faq-3',
-    category: 'Cloud & Security',
-    question: 'Can Alpha Layers help migrate our infrastructure to the Cloud?',
-    answer: 'Yes! We provide seamless migration to AWS, Google Cloud, and Azure. We optimize cloud workloads for performance, cost-efficiency, and implement zero-trust security protocols to keep your enterprise data protected.',
-  },
-  {
-    id: 'faq-4',
-    category: 'IT Services',
-    question: 'What is your typical project delivery timeline?',
-    answer: 'Timelines vary based on scope: specialized technical audits or advisory projects typically take 1–2 weeks, while full-scale custom enterprise platforms take 6–12 weeks from initial architectural blueprint to production deployment.',
-  },
-  {
-    id: 'faq-5',
-    category: 'Pricing & Consulting',
-    question: 'How do you structure project pricing and retainer contracts?',
-    answer: 'We offer flexible pricing models: fixed-scope milestone contracts for custom development projects, hourly dedicated engineering teams, and monthly managed IT & security retainers tailored to your business budget.',
-  },
-  {
-    id: 'faq-6',
-    category: 'Cloud & Security',
-    question: 'Do you offer ongoing technical maintenance and SLA support?',
-    answer: 'Absolutely. We provide 24/7 proactive system monitoring, automated security patch updates, daily cloud backups, and guaranteed response SLAs to ensure maximum uptime for your mission-critical applications.',
-  },
-  {
-    id: 'faq-7',
-    category: 'Custom Software',
-    question: 'Can you integrate modern AI models and automated workflows into our existing apps?',
-    answer: 'Yes. We specialize in embedding Generative AI capabilities, smart document processing, predictive analytics dashboards, and automated workflow pipelines directly into legacy or modern enterprise software stack.',
-  },
-];
+import React, { useMemo, useState } from 'react';
+import { ChevronDown, Search, HelpCircle, ArrowRight, Sparkles } from 'lucide-react';
+import { useSiteContent } from './SiteContentProvider';
 
 interface FAQSectionProps {
   onOpenQuote?: () => void;
@@ -61,16 +10,21 @@ interface FAQSectionProps {
   subtitle?: string;
 }
 
-export const FAQSection: React.FC<FAQSectionProps> = ({
-  onOpenQuote,
-  title = "Frequently Asked Questions",
-  subtitle = "Everything you need to know about Alpha Layers IT services, engineering process, and consulting solutions.",
-}) => {
+export const FAQSection: React.FC<FAQSectionProps> = ({ onOpenQuote, title, subtitle }) => {
+  const { content } = useSiteContent();
+  const faqData = content.collections.faqs;
+  const faqPage = content.pages.faq;
+  const displayTitle = title || faqPage.title;
+  const displaySubtitle = subtitle || faqPage.subtitle;
+
   const [activeCategory, setActiveCategory] = useState<string>('All');
-  const [openId, setOpenId] = useState<string | null>('faq-1'); // default first open
+  const [openId, setOpenId] = useState<string | null>(faqData[0]?.id || null);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const categories = ['All', 'IT Services', 'Custom Software', 'Cloud & Security', 'Pricing & Consulting'];
+  const categories = useMemo(
+    () => ['All', ...Array.from(new Set(faqData.map((f) => f.category)))],
+    [faqData]
+  );
 
   const filteredFaqs = faqData.filter((item) => {
     const matchesCategory = activeCategory === 'All' || item.category === activeCategory;
@@ -93,13 +47,13 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 bg-[#2563eb]/20 text-[#3b82f6] text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider">
             <HelpCircle className="w-4 h-4" />
-            <span>Got Questions?</span>
+            <span>{faqPage.badge}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
-            {title}
+            {displayTitle}
           </h2>
           <p className="text-sm sm:text-base text-slate-400">
-            {subtitle}
+            {displaySubtitle}
           </p>
         </div>
 
@@ -201,21 +155,17 @@ export const FAQSection: React.FC<FAQSectionProps> = ({
             <div className="space-y-2 text-center sm:text-left">
               <div className="inline-flex items-center gap-2 text-xs font-bold text-[#3b82f6]">
                 <Sparkles className="w-4 h-4" />
-                <span>Still have specific technical questions?</span>
+                <span>{faqPage.ctaEyebrow}</span>
               </div>
-              <h3 className="text-xl font-bold text-white">
-                Consult with our Alpha Layers IT Engineers
-              </h3>
-              <p className="text-xs text-slate-400">
-                Get custom advice, architectural recommendations, or a transparent project cost estimate.
-              </p>
+              <h3 className="text-xl font-bold text-white">{faqPage.ctaHeadline}</h3>
+              <p className="text-xs text-slate-400">{faqPage.ctaSubtext}</p>
             </div>
 
             <button
               onClick={onOpenQuote}
               className="bg-[#2563eb] text-white font-bold px-7 py-3.5 rounded-full flex items-center gap-2 hover:bg-[#1d4ed8] transition-all flex-shrink-0 shadow-lg hover:scale-105 cursor-pointer text-sm whitespace-nowrap"
             >
-              <span>Ask Our Engineers</span>
+              <span>{faqPage.ctaButtonLabel}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { ArrowUpRight, Filter } from 'lucide-react';
-import { projectsData } from '../data/mockData';
+'use client';
+
+import React, { useMemo, useState } from 'react';
+import { ArrowUpRight } from 'lucide-react';
+import { useSiteContent } from './SiteContentProvider';
 
 interface ProjectsShowcaseProps {
   onOpenQuote: (projectTitle: string) => void;
@@ -8,9 +10,15 @@ interface ProjectsShowcaseProps {
 }
 
 export const ProjectsShowcase: React.FC<ProjectsShowcaseProps> = ({ onOpenQuote, onViewAllProjects }) => {
+  const { content } = useSiteContent();
+  const section = content.home.projectsSection;
+  const projectsData = content.collections.projects;
   const [activeTab, setActiveTab] = useState<string>('All');
 
-  const categories = ['All', 'FinTech', 'Cloud', 'AI & Analytics', 'Enterprise IT'];
+  const categories = useMemo(
+    () => ['All', ...Array.from(new Set(projectsData.map((p) => p.category)))],
+    [projectsData]
+  );
 
   const filteredProjects = activeTab === 'All'
     ? projectsData
@@ -24,13 +32,13 @@ export const ProjectsShowcase: React.FC<ProjectsShowcaseProps> = ({ onOpenQuote,
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
             <span className="bg-[#2563eb]/20 text-[#3b82f6] text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider inline-block">
-              Featured Case Studies
+              {section.badge}
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
-              Delivering Proven Results For Industry Leaders
+              {section.headline}
             </h2>
             <p className="text-slate-400 text-sm leading-relaxed">
-              Explore how our IT consulting, cloud engineering, and proprietary software solutions drive tangible enterprise impact.
+              {section.description}
             </p>
           </div>
 
@@ -116,7 +124,7 @@ export const ProjectsShowcase: React.FC<ProjectsShowcaseProps> = ({ onOpenQuote,
               onClick={onViewAllProjects}
               className="bg-[#2563eb] text-white font-bold px-8 py-3.5 rounded-full text-sm inline-flex items-center gap-2 hover:bg-[#1d4ed8] transition-all cursor-pointer shadow-lg hover:scale-105"
             >
-              <span>View All Portfolio Projects</span>
+              <span>{section.viewAllLabel}</span>
               <ArrowUpRight className="w-4 h-4" />
             </button>
           </div>

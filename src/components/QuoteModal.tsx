@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { X, CheckCircle2, ArrowRight } from 'lucide-react';
 import { submitForm } from '../lib/submit-form';
+import { useSiteContent } from './SiteContentProvider';
 
 interface QuoteModalProps {
   isOpen: boolean;
@@ -9,6 +12,8 @@ interface QuoteModalProps {
 }
 
 export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, defaultService = 'Financial Consulting' }) => {
+  const { content } = useSiteContent();
+  const quote = content.modals.quote;
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
@@ -19,6 +24,10 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, default
     service: defaultService,
     message: '',
   });
+
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, service: defaultService }));
+  }, [defaultService]);
 
   if (!isOpen) return null;
 
@@ -58,14 +67,10 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, default
           <div className="space-y-6">
             <div>
               <div className="inline-block bg-[#2563eb] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
-                Request A Quote
+                {quote.badge}
               </div>
-              <h3 className="text-2xl font-bold text-white">
-                Accelerate Your Digital & IT Growth
-              </h3>
-              <p className="text-xs text-slate-400 mt-1">
-                Fill in your details and an Alpha Layers IT engineer will reach out within 2 hours.
-              </p>
+              <h3 className="text-2xl font-bold text-white">{quote.title}</h3>
+              <p className="text-xs text-slate-400 mt-1">{quote.subtitle}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -112,12 +117,11 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, default
                   onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                   className="w-full bg-[#182531] border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#2563eb]"
                 >
-                  <option value="Operational Consulting">Operational Consulting</option>
-                  <option value="Strategy Consulting">Strategy Consulting</option>
-                  <option value="Financial Consulting">Financial Consulting</option>
-                  <option value="Business Strategies">Business Strategies</option>
-                  <option value="Taxes & Accounting">Taxes & Accounting</option>
-                  <option value="Financial Planning">Financial Planning</option>
+                  {quote.serviceOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -137,7 +141,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, default
                 disabled={submitting}
                 className="w-full bg-[#2563eb] text-white font-bold py-3.5 rounded-full flex items-center justify-center gap-2 hover:bg-[#1d4ed8] transition-all cursor-pointer shadow-lg disabled:opacity-60"
               >
-                <span>{submitting ? 'Submitting...' : 'Submit Quote Request'}</span>
+                <span>{submitting ? 'Submitting...' : quote.submitLabel}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
               {submitError && <p className="text-xs text-red-400 text-center">{submitError}</p>}
@@ -148,11 +152,10 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose, default
             <div className="w-16 h-16 rounded-full bg-[#2563eb] text-white flex items-center justify-center mx-auto shadow-lg">
               <CheckCircle2 className="w-10 h-10" />
             </div>
-            <h3 className="text-2xl font-bold text-white">
-              Request Received!
-            </h3>
+            <h3 className="text-2xl font-bold text-white">{quote.successTitle}</h3>
             <p className="text-xs text-slate-300 max-w-sm mx-auto">
-              Thank you, <span className="text-[#3b82f6] font-semibold">{formData.fullName || 'Valued Client'}</span>. Our senior consultant will contact you at {formData.email || 'your email'} shortly.
+              {quote.successBody}{' '}
+              <span className="text-[#3b82f6] font-semibold">{formData.fullName || 'Valued Client'}</span>
             </p>
             <button
               onClick={handleReset}

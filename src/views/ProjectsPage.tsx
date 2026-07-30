@@ -1,16 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ArrowUpRight, CheckCircle2 } from 'lucide-react';
-import { projectsData } from '../data/mockData';
+import { useSiteContent } from '../components/SiteContentProvider';
 
 interface ProjectsPageProps {
   onOpenQuote: (projectTitle: string) => void;
 }
 
 export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onOpenQuote }) => {
+  const { content } = useSiteContent();
+  const page = content.pages.projects;
+  const projectsData = content.collections.projects;
   const [activeTab, setActiveTab] = useState('All');
-  const categories = ['All', 'FinTech', 'Cloud', 'AI & Analytics', 'Enterprise IT'];
+  const categories = useMemo(
+    () => ['All', ...Array.from(new Set(projectsData.map((p) => p.category)))],
+    [projectsData]
+  );
 
   const filteredProjects = activeTab === 'All'
     ? projectsData
@@ -23,13 +29,13 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onOpenQuote }) => {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <span className="bg-[#2563eb]/20 text-[#3b82f6] text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider inline-block">
-            Case Studies & Portfolio
+            {page.badge}
           </span>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-            Our Proven Enterprise Track Record
+            {page.headline}
           </h1>
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-            Detailed case studies of complex IT infrastructure upgrades, core banking platforms, and automated supply chain architectures engineered by Optibiz.
+            {page.description}
           </p>
 
           {/* Filter Pills */}
@@ -93,7 +99,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onOpenQuote }) => {
                   onClick={() => onOpenQuote(`Case Study Inquiry: ${proj.title}`)}
                   className="w-full bg-white/5 hover:bg-[#2563eb] hover:text-white text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 transition-all cursor-pointer text-xs"
                 >
-                  <span>Request Full Case Study Report</span>
+                  <span>{page.caseStudyCtaLabel}</span>
                   <ArrowUpRight className="w-4 h-4" />
                 </button>
               </div>

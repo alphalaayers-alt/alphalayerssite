@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useSiteContent } from './SiteContentProvider';
 
 interface LogoProps {
   className?: string;
@@ -9,8 +10,6 @@ interface LogoProps {
   size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
-const LOGO_SRC = '/src/assets/images/lalogo1.png';
-
 const sizeMap = {
   xs: 'h-7 sm:h-8 w-auto shrink-0',
   sm: 'max-h-9 sm:max-h-10 w-auto',
@@ -18,14 +17,13 @@ const sizeMap = {
   lg: 'max-h-12 sm:max-h-14 lg:max-h-16 w-auto',
 };
 
-export const Logo: React.FC<LogoProps> = ({
-  className = '',
-  size = 'md',
-}) => {
+export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
+  const { content } = useSiteContent();
+
   return (
     <img
-      src={LOGO_SRC}
-      alt="Alpha Layers IT Services Agency"
+      src={content.brand.logoFooter}
+      alt={`${content.brand.name} ${content.brand.tagline}`}
       className={`object-contain ${sizeMap[size]} ${className}`}
     />
   );

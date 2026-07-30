@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
-import { ArrowUpRight, CheckCircle2, Cpu, ShieldCheck, Zap } from 'lucide-react';
-import { productsData } from '../data/mockData';
+import { ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import { useSiteContent } from './SiteContentProvider';
 
 interface InHouseProductsProps {
   onOpenQuote: (productTitle: string) => void;
@@ -8,6 +10,10 @@ interface InHouseProductsProps {
 }
 
 export const InHouseProducts: React.FC<InHouseProductsProps> = ({ onOpenQuote, onViewAllProducts }) => {
+  const { content } = useSiteContent();
+  const section = content.home.productsSection;
+  const productsData = content.collections.products;
+
   return (
     <section id="products-section" className="bg-[#0b1218] text-white py-20 px-4 sm:px-8 lg:px-12 border-t border-white/5">
       <div className="max-w-[1500px] mx-auto space-y-12">
@@ -16,13 +22,13 @@ export const InHouseProducts: React.FC<InHouseProductsProps> = ({ onOpenQuote, o
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
             <span className="bg-[#2563eb]/20 text-[#3b82f6] text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider inline-block">
-              In-House IT Products
+              {section.badge}
             </span>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
-              Proprietary Enterprise Software Engineered By Optibiz
+              {section.headline}
             </h2>
             <p className="text-slate-400 text-sm leading-relaxed">
-              As an IT services & consulting enterprise, we build cutting-edge SaaS platforms designed to accelerate financial intelligence and streamline operations.
+              {section.description}
             </p>
           </div>
 
@@ -31,7 +37,7 @@ export const InHouseProducts: React.FC<InHouseProductsProps> = ({ onOpenQuote, o
               onClick={onViewAllProducts}
               className="bg-[#18232c] hover:bg-white/10 text-[#3b82f6] border border-[#2563eb]/40 font-bold px-6 py-3 rounded-full text-xs sm:text-sm flex items-center gap-2 transition-all self-start md:self-auto cursor-pointer"
             >
-              <span>Explore All Products</span>
+              <span>{section.viewAllLabel}</span>
               <ArrowUpRight className="w-4 h-4" />
             </button>
           )}

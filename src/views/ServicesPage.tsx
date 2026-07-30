@@ -1,12 +1,18 @@
+'use client';
+
 import React from 'react';
 import { ArrowUpRight, CheckCircle2, Settings, Compass, DollarSign, Cpu, Calculator, BarChart3 } from 'lucide-react';
-import { servicesData } from '../data/mockData';
+import { useSiteContent } from '../components/SiteContentProvider';
 
 interface ServicesPageProps {
   onOpenQuote: (serviceTitle: string) => void;
 }
 
 export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenQuote }) => {
+  const { content } = useSiteContent();
+  const page = content.pages.services;
+  const servicesData = content.collections.services;
+
   const getIcon = (iconName: string) => {
     switch (iconName) {
       case 'Settings': return Settings;
@@ -26,13 +32,13 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenQuote }) => {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <span className="bg-[#2563eb]/20 text-[#3b82f6] text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider inline-block">
-            Our Enterprise Services
+            {page.badge}
           </span>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-            Integrated Financial & IT Consulting Services
+            {page.headline}
           </h1>
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-            We deliver end-to-end strategy, custom software engineering, cloud transformations, and corporate tax compliance tailored to high-growth organizations.
+            {page.description}
           </p>
         </div>
 
@@ -80,7 +86,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onOpenQuote }) => {
                   onClick={() => onOpenQuote(srv.title)}
                   className="w-full bg-[#182531] hover:bg-[#2563eb] hover:text-white text-white font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all cursor-pointer text-xs shadow-md"
                 >
-                  <span>Inquire About Service</span>
+                  <span>{page.inquireLabel}</span>
                   <ArrowUpRight className="w-4 h-4" />
                 </button>
               </div>

@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
-import { isAdminAuthenticated } from '@/lib/admin-auth';
+import { getAdminSession } from '@/lib/admin-auth';
 
 export async function GET() {
-  const authenticated = await isAdminAuthenticated();
-  return NextResponse.json({ authenticated });
+  const session = await getAdminSession();
+  return NextResponse.json({
+    authenticated: session.authenticated,
+    user: session.user,
+  });
 }

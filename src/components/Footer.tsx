@@ -4,13 +4,15 @@ import React, { useState } from 'react';
 import { ArrowRight, Mail, Phone, MapPin, Linkedin, Twitter, Facebook, Instagram } from 'lucide-react';
 import { Logo } from './Logo';
 import { submitForm } from '../lib/submit-form';
+import { useSiteContent } from './SiteContentProvider';
 
 interface FooterProps {
   onOpenQuote: () => void;
   setActivePage: (page: string) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenQuote, setActivePage }) => {
+export const Footer: React.FC<FooterProps> = ({ setActivePage }) => {
+  const { content } = useSiteContent();
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
@@ -35,21 +37,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenQuote, setActivePage }) =>
   return (
     <footer id="contact-footer" className="bg-[#0b1218] text-white pt-16 pb-8 border-t border-white/10 px-4 sm:px-8 lg:px-12">
       <div className="max-w-[1500px] mx-auto space-y-12">
-        
-        {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 pb-12 border-b border-white/10">
-          
-          {/* Brand Info */}
           <div className="lg:col-span-4 space-y-4">
-            <div 
-              onClick={() => handleNav('home')}
-              className="flex items-center cursor-pointer group"
-            >
+            <div onClick={() => handleNav('home')} className="flex items-center cursor-pointer group">
               <Logo variant="dark" size="md" />
             </div>
-            <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              Where technical precision meets enterprise growth. Global IT services agency providing in-house software platforms, cloud infrastructure, and strategic digital transformation.
-            </p>
+            <p className="text-xs text-slate-400 leading-relaxed max-w-sm">{content.footer.blurb}</p>
             <div className="flex items-center gap-3 pt-2">
               {[Linkedin, Twitter, Facebook, Instagram].map((Icon, idx) => (
                 <button
@@ -63,45 +56,45 @@ export const Footer: React.FC<FooterProps> = ({ onOpenQuote, setActivePage }) =>
             </div>
           </div>
 
-          {/* Quick Links */}
           <div className="lg:col-span-2 space-y-3">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider">Quick Links</h4>
             <ul className="space-y-2 text-xs text-slate-400">
-              <li><button onClick={() => handleNav('home')} className="hover:text-[#3b82f6] transition-colors text-left cursor-pointer">Home Page</button></li>
-              <li><button onClick={() => handleNav('about')} className="hover:text-[#3b82f6] transition-colors text-left cursor-pointer">About Us</button></li>
-              <li><button onClick={() => handleNav('services')} className="hover:text-[#3b82f6] transition-colors text-left cursor-pointer">Our Services</button></li>
-              <li><button onClick={() => handleNav('products')} className="hover:text-[#3b82f6] transition-colors text-left cursor-pointer">In-House Products</button></li>
-              <li><button onClick={() => handleNav('projects')} className="hover:text-[#3b82f6] transition-colors text-left cursor-pointer">Case Studies</button></li>
-              <li><button onClick={() => handleNav('blog')} className="hover:text-[#3b82f6] transition-colors text-left cursor-pointer">Insights & Blog</button></li>
-              <li><button onClick={() => handleNav('faq')} className="hover:text-[#3b82f6] transition-colors text-left cursor-pointer">FAQ & Help</button></li>
+              {content.nav.items.map((item) => (
+                <li key={item.id}>
+                  <button onClick={() => handleNav(item.id)} className="hover:text-[#3b82f6] transition-colors text-left cursor-pointer">
+                    {item.label}
+                  </button>
+                </li>
+              ))}
+              <li>
+                <button onClick={() => handleNav('contact')} className="hover:text-[#3b82f6] transition-colors text-left cursor-pointer">
+                  {content.nav.contactLabel}
+                </button>
+              </li>
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider">Contact Info</h4>
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li className="flex items-center gap-2.5">
                 <MapPin className="w-4 h-4 text-[#2563eb] flex-shrink-0" />
-                <span>124 Tech Park Plaza, Silicon Avenue, NY</span>
+                <span>{content.footer.address}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-[#2563eb] flex-shrink-0" />
-                <span>+91 9635301453</span>
+                <span>{content.footer.phone}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-[#2563eb] flex-shrink-0" />
-                <span>alphalaayers@gmail.com</span>
+                <span>{content.footer.email}</span>
               </li>
             </ul>
           </div>
 
-          {/* Newsletter Box */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Newsletter</h4>
-            <p className="text-xs text-slate-400 leading-snug">
-              Subscribe to get the latest tech insights, software architecture updates, and cloud security trends.
-            </p>
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">{content.footer.newsletterHeading}</h4>
+            <p className="text-xs text-slate-400 leading-snug">{content.footer.newsletterBlurb}</p>
             <form onSubmit={handleNewsletter} className="space-y-2 pt-1">
               <div className="flex items-center gap-2">
                 <input
@@ -122,27 +115,28 @@ export const Footer: React.FC<FooterProps> = ({ onOpenQuote, setActivePage }) =>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
-              {newsletterStatus === 'success' && (
-                <p className="text-xs text-green-400">Subscribed successfully!</p>
-              )}
-              {newsletterStatus === 'error' && (
-                <p className="text-xs text-red-400">Failed to subscribe. Try again.</p>
-              )}
+              {newsletterStatus === 'success' && <p className="text-xs text-green-400">Subscribed successfully!</p>}
+              {newsletterStatus === 'error' && <p className="text-xs text-red-400">Failed to subscribe. Try again.</p>}
             </form>
           </div>
-
         </div>
 
-        {/* Copyright Bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} Alpha Layers IT Services Agency. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} {content.footer.copyrightName}. All rights reserved.
+          </p>
           <div className="flex items-center gap-6">
-            <button onClick={() => handleNav('contact')} className="hover:text-slate-300 transition-colors">Privacy Policy</button>
-            <button onClick={() => handleNav('contact')} className="hover:text-slate-300 transition-colors">Terms of Service</button>
-            <button onClick={() => handleNav('contact')} className="hover:text-slate-300 transition-colors">Cookie Settings</button>
+            <button onClick={() => handleNav('contact')} className="hover:text-slate-300 transition-colors">
+              Privacy Policy
+            </button>
+            <button onClick={() => handleNav('contact')} className="hover:text-slate-300 transition-colors">
+              Terms of Service
+            </button>
+            <button onClick={() => handleNav('contact')} className="hover:text-slate-300 transition-colors">
+              Cookie Settings
+            </button>
           </div>
         </div>
-
       </div>
     </footer>
   );

@@ -1,12 +1,18 @@
+'use client';
+
 import React from 'react';
 import { ArrowUpRight, CheckCircle2, ShieldCheck, Zap, Server } from 'lucide-react';
-import { productsData } from '../data/mockData';
+import { useSiteContent } from '../components/SiteContentProvider';
 
 interface ProductsPageProps {
   onOpenQuote: (productTitle: string) => void;
 }
 
 export const ProductsPage: React.FC<ProductsPageProps> = ({ onOpenQuote }) => {
+  const { content } = useSiteContent();
+  const page = content.pages.products;
+  const productsData = content.collections.products;
+
   return (
     <div className="bg-[#0d151c] text-white py-16 px-4 sm:px-8 lg:px-12 space-y-16 animate-in fade-in duration-300">
       <div className="max-w-[1500px] mx-auto space-y-12">
@@ -14,13 +20,13 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ onOpenQuote }) => {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <span className="bg-[#2563eb]/20 text-[#3b82f6] text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider inline-block">
-            In-House Software Products
+            {page.badge}
           </span>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-            Optibiz Proprietary IT Solutions
+            {page.headline}
           </h1>
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-            Engineered by our in-house software architects to streamline financial data workflows, automate resource planning, and safeguard cloud networks.
+            {page.description}
           </p>
         </div>
 
@@ -72,7 +78,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ onOpenQuote }) => {
                     onClick={() => onOpenQuote(`Demo: ${prod.title}`)}
                     className="bg-[#2563eb] text-white font-bold px-7 py-3 rounded-full flex items-center gap-2 hover:bg-[#1d4ed8] transition-all cursor-pointer text-xs shadow-lg hover:scale-105"
                   >
-                    <span>Request Product Demo</span>
+                    <span>{page.demoCtaLabel}</span>
                     <ArrowUpRight className="w-4 h-4" />
                   </button>
                 </div>

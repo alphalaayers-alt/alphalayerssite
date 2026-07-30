@@ -1,4 +1,6 @@
 node_modules/
+.next/
+out/
 build/
 dist/
 coverage/
@@ -7,3 +9,13 @@ coverage/
 .env*
 !.env.example
 data/submissions.json
+data/blogs.json
+data/newsletter-subscribers.json
+data/newsletter-campaigns.json
+data/ga-settings.json
+data/site-content.json
+data/users.json
+data/attendance.json
+data/notes.json
+data/projects.json
+public/uploads/

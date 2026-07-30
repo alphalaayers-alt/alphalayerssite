@@ -1,15 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { blogPostsData } from '../data/mockData';
 import { Clock, Calendar, ArrowUpRight, X } from 'lucide-react';
 import { BlogPost } from '../types';
+import { useBlogPosts } from '../lib/use-blog-posts';
+import { useSiteContent } from '../components/SiteContentProvider';
 
 export const BlogPage: React.FC = () => {
+  const posts = useBlogPosts();
+  const { content } = useSiteContent();
+  const page = content.pages.blog;
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredPosts = blogPostsData.filter(
+  const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -23,20 +27,20 @@ export const BlogPage: React.FC = () => {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <span className="bg-[#2563eb]/20 text-[#3b82f6] text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wider inline-block">
-            Insights & Articles
+            {page.badge}
           </span>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-            Optibiz Technology & Finance Blog
+            {page.headline}
           </h1>
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
-            In-depth analysis, engineering best practices, and strategic commentary on IT modernization, AI in finance, and cybersecurity.
+            {page.description}
           </p>
 
           {/* Search Bar */}
           <div className="max-w-md mx-auto pt-4">
             <input
               type="text"
-              placeholder="Search articles, topics or categories..."
+              placeholder={page.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-[#18232c] border border-white/10 rounded-full px-5 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#2563eb] shadow-lg"

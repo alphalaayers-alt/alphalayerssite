@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import { getSupabase, isSupabaseEnabled } from './supabase/client';
 
 export type SubmissionType = 'contact' | 'quote' | 'newsletter';
 
@@ -23,6 +24,18 @@ async function ensureDataFile() {
 }
 
 export async function getSubmissions(): Promise<Submission[]> {
+  if (isSupabaseEnabled()) {
+    const sb = getSupabase();
+    const { data, error } = await sb.from('submissions').select('*').order('created_at', { ascending: false });
+    if (error) throw new Error(error.message);
+    return (data || []).map((row) => ({
+      id: row.id,
+      type: row.type as SubmissionType,
+      createdAt: row.created_at,
+      data: (row.data || {}) as Record<string, string>,
+    }));
+  }
+
   await ensureDataFile();
   const raw = await fs.readFile(DATA_FILE, 'utf-8');
   const parsed = JSON.parse(raw);
@@ -33,13 +46,26 @@ export async function addSubmission(
   type: SubmissionType,
   data: Record<string, string>
 ): Promise<Submission> {
-  const submissions = await getSubmissions();
   const submission: Submission = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
     type,
     createdAt: new Date().toISOString(),
     data,
   };
+
+  if (isSupabaseEnabled()) {
+    const sb = getSupabase();
+    const { error } = await sb.from('submissions').insert({
+      id: submission.id,
+      type: submission.type,
+      data: submission.data,
+      created_at: submission.createdAt,
+    });
+    if (error) throw new Error(error.message);
+    return submission;
+  }
+
+  const submissions = await getSubmissions();
   submissions.unshift(submission);
   await fs.writeFile(DATA_FILE, JSON.stringify(submissions, null, 2), 'utf-8');
   return submission;

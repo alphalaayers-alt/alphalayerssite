@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { addSubmission, type SubmissionType } from '@/lib/submissions';
+import { addSubscriber } from '@/lib/newsletter';
 
 const VALID_TYPES: SubmissionType[] = ['contact', 'quote', 'newsletter'];
 
@@ -37,6 +38,11 @@ export async function POST(request: Request) {
     }
 
     const submission = await addSubmission(type, sanitized);
+
+    if (type === 'newsletter' && sanitized.email) {
+      await addSubscriber(sanitized.email);
+    }
+
     return NextResponse.json({ success: true, id: submission.id });
   } catch {
     return NextResponse.json({ error: 'Failed to save submission' }, { status: 500 });

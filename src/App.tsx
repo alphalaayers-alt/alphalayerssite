@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { QuoteModal } from './components/QuoteModal';
 import { VideoModal } from './components/VideoModal';
 import { FAQSection } from './components/FAQSection';
+import { SiteContentProvider } from './components/SiteContentProvider';
+import { trackSitePage } from './components/GoogleAnalytics';
 
 // Pages
 import { HomePage } from './views/HomePage';
@@ -20,6 +22,15 @@ export default function App() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState('IT Services & Advisory');
 
+  useEffect(() => {
+    trackSitePage(activePage);
+  }, [activePage]);
+
+  const navigateTo = (page: string) => {
+    setActivePage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleOpenQuote = (serviceTitle?: string) => {
     if (serviceTitle) {
       setSelectedService(serviceTitle);
@@ -34,10 +45,7 @@ export default function App() {
           <HomePage
             onOpenQuote={handleOpenQuote}
             onOpenVideo={() => setIsVideoModalOpen(true)}
-            onNavigate={(page) => {
-              setActivePage(page);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
+            onNavigate={navigateTo}
           />
         );
       case 'about':
@@ -59,48 +67,41 @@ export default function App() {
           <HomePage
             onOpenQuote={handleOpenQuote}
             onOpenVideo={() => setIsVideoModalOpen(true)}
-            onNavigate={(page) => {
-              setActivePage(page);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
+            onNavigate={navigateTo}
           />
         );
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0d151c] text-slate-100 antialiased selection:bg-[#2563eb] selection:text-white flex flex-col justify-between">
-      
-      {/* Top Header Navbar */}
-      <Navbar
-        onOpenQuote={() => handleOpenQuote()}
-        activePage={activePage}
-        setActivePage={setActivePage}
-      />
+    <SiteContentProvider>
+      <div className="min-h-screen bg-[#0d151c] text-slate-100 antialiased selection:bg-[#2563eb] selection:text-white flex flex-col justify-between">
+        <Navbar
+          onOpenQuote={() => handleOpenQuote()}
+          activePage={activePage}
+          setActivePage={navigateTo}
+        />
 
-      {/* Dynamic Main Page Content */}
-      <main className="flex-grow">
-        {renderActivePage()}
-      </main>
+        <main className="flex-grow">
+          {renderActivePage()}
+        </main>
 
-      {/* Global Footer */}
-      <Footer
-        onOpenQuote={() => handleOpenQuote()}
-        setActivePage={setActivePage}
-      />
+        <Footer
+          onOpenQuote={() => handleOpenQuote()}
+          setActivePage={navigateTo}
+        />
 
-      {/* Modals */}
-      <QuoteModal
-        isOpen={isQuoteModalOpen}
-        onClose={() => setIsQuoteModalOpen(false)}
-        defaultService={selectedService}
-      />
+        <QuoteModal
+          isOpen={isQuoteModalOpen}
+          onClose={() => setIsQuoteModalOpen(false)}
+          defaultService={selectedService}
+        />
 
-      <VideoModal
-        isOpen={isVideoModalOpen}
-        onClose={() => setIsVideoModalOpen(false)}
-      />
-
-    </div>
+        <VideoModal
+          isOpen={isVideoModalOpen}
+          onClose={() => setIsVideoModalOpen(false)}
+        />
+      </div>
+    </SiteContentProvider>
   );
 }
