@@ -45,8 +45,8 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
   home: {
     hero: {
       welcomeTag: "Welcome To Alpha Layers",
-      headline: "Where Technical Precision Meets",
-      headlineAccent: "Excellence",
+      headline: "HELPING BUSINESSES GROW WITH IT & DIGITAL MARKETING",
+      headlineAccent: "SOLUTIONS",
       description:
         "Empowering global enterprises with custom software engineering, cloud infrastructure, and innovative IT agency solutions.",
       primaryCta: "Let's Get Started",
@@ -86,84 +86,96 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
         {
           id: "mobile-app-development",
           title: "Mobile App Development",
-          image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=80",
           icon: "Mobile App Development",
           desc: "Build high-performance mobile apps for iOS and Android with modern UX and backend integration.",
         },
         {
           id: "website-development",
           title: "Website Development",
-          image: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&auto=format&fit=crop&q=80",
           icon: "Website Development",
           desc: "Craft responsive websites optimized for performance, conversions, and brand trust.",
         },
         {
           id: "custom-software-development",
           title: "Custom Software Development",
-          image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80",
           icon: "Custom Software Development",
           desc: "Design bespoke software solutions tailored to your workflows, data, and business goals.",
         },
         {
           id: "ai-automation",
           title: "AI Automation",
-          image: "https://images.unsplash.com/photo-1677442136019-21780efad99a?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1677442136019-21780efad99a?w=800&auto=format&fit=crop&q=80",
           icon: "AI Automation",
           desc: "Automate operations and decisions using AI-driven workflows, analytics, and intelligent bots.",
         },
         {
           id: "saas-development",
           title: "SaaS Development",
-          image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80",
           icon: "SaaS Development",
           desc: "Launch scalable SaaS platforms with secure multi-tenant architecture and seamless onboarding.",
         },
         {
           id: "cloud-solutions",
           title: "Cloud Solutions",
-          image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80",
           icon: "Cloud Solutions",
           desc: "Deploy resilient cloud infrastructure and optimize hosting, storage, and operations.",
         },
         {
           id: "ui-ux-design",
           title: "UI/UX Design",
-          image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=800&auto=format&fit=crop&q=80",
           icon: "UI/UX Design",
           desc: "Create intuitive digital experiences that delight users and boost engagement.",
         },
         {
           id: "graphic-design",
           title: "Graphic Design",
-          image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&auto=format&fit=crop&q=80",
           icon: "Graphic Design",
           desc: "Deliver compelling visual design for brands, campaigns, and digital content.",
         },
         {
           id: "seo",
           title: "SEO",
-          image: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&auto=format&fit=crop&q=80",
           icon: "SEO",
           desc: "Improve search visibility and organic traffic with strategic SEO and content optimization.",
         },
         {
           id: "social-media-management",
           title: "Social Media Management",
-          image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&auto=format&fit=crop&q=80",
           icon: "Social Media Management",
           desc: "Manage social channels with branded content, engagement, and campaign analytics.",
         },
         {
           id: "content-creation",
           title: "Content Creation",
-          image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&auto=format&fit=crop&q=80",
           icon: "Content Creation",
           desc: "Produce high-quality content for blogs, video, social, and digital marketing.",
         },
         {
           id: "maintenance-support",
           title: "Maintenance & Support",
-          image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80",
+          image:
+            "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80",
           icon: "Maintenance & Support",
           desc: "Provide ongoing system maintenance, upgrades, and support for your digital products.",
         },

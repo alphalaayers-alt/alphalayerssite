@@ -51,21 +51,35 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 const SERVICE_IMAGES: Record<string, string> = {
-  "Mobile App Development": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=80",
-  "Website Development": "https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&auto=format&fit=crop&q=80",
-  "Custom Software Development": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80",
-  "AI Automation": "https://images.unsplash.com/photo-1677442136019-21780efad99a?w=800&auto=format&fit=crop&q=80",
-  "SaaS Development": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80",
-  "Cloud Solutions": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80",
-  "UI/UX Design": "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=800&auto=format&fit=crop&q=80",
-  "Graphic Design": "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&auto=format&fit=crop&q=80",
+  "Mobile App Development":
+    "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=80",
+  "Website Development":
+    "https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&auto=format&fit=crop&q=80",
+  "Custom Software Development":
+    "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80",
+  "AI Automation":
+    "https://images.unsplash.com/photo-1677442136019-21780efad99a?w=800&auto=format&fit=crop&q=80",
+  "SaaS Development":
+    "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80",
+  "Cloud Solutions":
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop&q=80",
+  "UI/UX Design":
+    "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=800&auto=format&fit=crop&q=80",
+  "Graphic Design":
+    "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&auto=format&fit=crop&q=80",
   SEO: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&auto=format&fit=crop&q=80",
-  "Social Media Management": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&auto=format&fit=crop&q=80",
-  "Content Creation": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&auto=format&fit=crop&q=80",
-  "Maintenance & Support": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80",
-  "Business Strategies": "/src/assets/images/service_business_strategies_1785300397999.jpg",
-  "Taxes & Accounting": "/src/assets/images/service_taxes_accounting_1785300412746.jpg",
-  "Financial Planning": "/src/assets/images/service_financial_planning_1785300427909.jpg",
+  "Social Media Management":
+    "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&auto=format&fit=crop&q=80",
+  "Content Creation":
+    "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&auto=format&fit=crop&q=80",
+  "Maintenance & Support":
+    "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=80",
+  "Business Strategies":
+    "/src/assets/images/service_business_strategies_1785300397999.jpg",
+  "Taxes & Accounting":
+    "/src/assets/images/service_taxes_accounting_1785300412746.jpg",
+  "Financial Planning":
+    "/src/assets/images/service_financial_planning_1785300427909.jpg",
 };
 
 export const Services: React.FC<ServicesProps> = ({
@@ -83,9 +97,12 @@ export const Services: React.FC<ServicesProps> = ({
       ...(teaser?.cards || []),
       ...DEFAULT_SITE_CONTENT.home.servicesTeaser.cards,
     ];
-    
+
     // Deduplicate cards by title
-    const uniqueMap = new Map<string, (typeof DEFAULT_SITE_CONTENT.home.servicesTeaser.cards)[0]>();
+    const uniqueMap = new Map<
+      string,
+      (typeof DEFAULT_SITE_CONTENT.home.servicesTeaser.cards)[0]
+    >();
     for (const c of rawCards) {
       if (c && c.title && !uniqueMap.has(c.title)) {
         uniqueMap.set(c.title, c);
@@ -183,9 +200,12 @@ export const Services: React.FC<ServicesProps> = ({
           >
             {cards.map((card) => {
               const IconComponent = ICON_MAP[card.title] || DollarSign;
-              const cardImage = card.image && card.image.startsWith("http")
-                ? card.image
-                : (SERVICE_IMAGES[card.title] || card.image || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80");
+              const cardImage =
+                card.image && card.image.startsWith("http")
+                  ? card.image
+                  : SERVICE_IMAGES[card.title] ||
+                    card.image ||
+                    "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80";
 
               return (
                 <div

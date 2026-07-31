@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { ArrowRight, Play, CheckCircle2, Plus } from 'lucide-react';
-import { useSiteContent } from './SiteContentProvider';
+import React from "react";
+import { ArrowRight, Play, CheckCircle2, Plus } from "lucide-react";
+import { useSiteContent } from "./SiteContentProvider";
 
 interface HeroProps {
   onOpenQuote: () => void;
@@ -14,18 +14,26 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onOpenVideo }) => {
   const hero = content.home.hero;
 
   return (
-    <section id="home" className="relative bg-[#0d151c] text-white pt-12 pb-20 px-4 sm:px-8 lg:px-12 overflow-hidden">
+    <section
+      id="home"
+      className="relative bg-[#0d151c] text-white pt-12 pb-20 px-4 sm:px-8 lg:px-12 overflow-hidden min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)]"
+    >
       <div className="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div className="lg:col-span-6 flex flex-col items-start space-y-6 z-10">
           <div className="inline-flex items-center gap-2 bg-[#18232c] border border-white/10 px-4 py-1.5 rounded-full text-xs font-semibold text-slate-300">
             <span>{hero.welcomeTag}</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12]">
-            {hero.headline} <span className="text-[#3b82f6]">{hero.headlineAccent}</span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white leading-[1.12]">
+            {hero.headline}{" "}
+            <span className="text-[#3b82f6] font-semibold">
+              {hero.headlineAccent}
+            </span>
           </h1>
 
-          <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-xl">{hero.description}</p>
+          <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-xl">
+            {hero.description}
+          </p>
 
           <div className="flex flex-wrap items-center gap-4 pt-2">
             <button
@@ -51,7 +59,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onOpenVideo }) => {
 
           <div className="pt-8 border-t border-white/10 w-full">
             <div className="flex flex-col gap-2">
-              <span className="text-xs font-semibold text-slate-300">{hero.teamLabel}</span>
+              <span className="text-xs font-semibold text-slate-300">
+                {hero.teamLabel}
+              </span>
               <div className="flex items-center -space-x-3">
                 {hero.teamAvatars.map((url, idx) => (
                   <img
@@ -76,7 +86,9 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onOpenVideo }) => {
               <div className="w-6 h-6 rounded-full bg-[#2563eb] text-white flex items-center justify-center flex-shrink-0">
                 <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
               </div>
-              <span className="text-xs sm:text-sm font-semibold text-slate-200 leading-snug">{hero.floatingBadge}</span>
+              <span className="text-xs sm:text-sm font-semibold text-slate-200 leading-snug">
+                {hero.floatingBadge}
+              </span>
             </div>
 
             <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
