@@ -526,6 +526,51 @@ export function WebsiteManager() {
               />
             </Field>
           </BentoCard>
+
+          <BentoCard className="space-y-4 col-span-full">
+            <CollectionEditor
+              title="Homepage Service Cards"
+              items={content.home.servicesTeaser.cards || []}
+              onChange={(cards) =>
+                setContent({
+                  ...content,
+                  home: {
+                    ...content.home,
+                    servicesTeaser: { ...content.home.servicesTeaser, cards },
+                  },
+                })
+              }
+              blank={() => ({
+                id: createId('srv-card'),
+                title: 'New Service',
+                image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80',
+                icon: 'New Service',
+                desc: 'Description of the new service provided.',
+              })}
+              renderFields={(item, update) => (
+                <>
+                  <Field label="Service Card Title">
+                    <BentoInput
+                      value={item.title}
+                      onChange={(e) => update({ title: e.target.value, icon: e.target.value })}
+                    />
+                  </Field>
+                  <Field label="Short Description">
+                    <BentoTextarea
+                      rows={2}
+                      value={item.desc}
+                      onChange={(e) => update({ desc: e.target.value })}
+                    />
+                  </Field>
+                  <ImageField
+                    label="Service Card Image URL"
+                    value={item.image}
+                    onChange={(url) => update({ image: url })}
+                  />
+                </>
+              )}
+            />
+          </BentoCard>
         </div>
       )}
 
@@ -588,18 +633,35 @@ export function WebsiteManager() {
         <CollectionEditor
           title="Services"
           items={content.collections.services}
-          onChange={(services) =>
-            setContent({ ...content, collections: { ...content.collections, services } })
-          }
+          onChange={(services) => {
+            const updatedCards = services.map((s) => ({
+              id: s.id,
+              title: s.title,
+              image: s.image || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80',
+              icon: s.title,
+              desc: s.shortDesc || s.fullDesc || '',
+            }));
+            setContent({
+              ...content,
+              collections: { ...content.collections, services },
+              home: {
+                ...content.home,
+                servicesTeaser: {
+                  ...content.home.servicesTeaser,
+                  cards: updatedCards,
+                },
+              },
+            });
+          }}
           blank={() => ({
             id: createId('srv'),
             title: 'New Service',
             category: 'General',
-            shortDesc: '',
-            fullDesc: '',
-            features: [''],
+            shortDesc: 'New service description',
+            fullDesc: 'Full detailed description of the new service',
+            features: ['Feature 1', 'Feature 2'],
             icon: 'Settings',
-            image: '/src/assets/images/service_business_strategies_1785300397999.jpg',
+            image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80',
           })}
           renderFields={(item, update) => (
             <>
