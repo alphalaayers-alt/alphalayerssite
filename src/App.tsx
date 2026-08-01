@@ -4,6 +4,7 @@ import { Footer } from './components/Footer';
 import { QuoteModal } from './components/QuoteModal';
 import { VideoModal } from './components/VideoModal';
 import { FAQSection } from './components/FAQSection';
+import { ChatBotWidget } from './components/ChatBotWidget';
 import { SiteContentProvider } from './components/SiteContentProvider';
 import { trackSitePage } from './components/GoogleAnalytics';
 
@@ -101,6 +102,8 @@ export default function App() {
           isOpen={isVideoModalOpen}
           onClose={() => setIsVideoModalOpen(false)}
         />
+
+        <ChatBotWidget />
       </div>
     </SiteContentProvider>
   );

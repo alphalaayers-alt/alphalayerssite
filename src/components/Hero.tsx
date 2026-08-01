@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Play, CheckCircle2, Plus } from "lucide-react";
 import { useSiteContent } from "./SiteContentProvider";
 
@@ -12,6 +12,23 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onOpenVideo }) => {
   const { content } = useSiteContent();
   const hero = content.home.hero;
+  const serviceImages = useMemo(
+    () => content.home.servicesTeaser.cards.map((card) => card.image),
+    [content.home.servicesTeaser.cards]
+  );
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    if (serviceImages.length === 0) return;
+    const interval = window.setInterval(() => {
+      setCurrentImageIndex(
+        (prevIndex) => (prevIndex + 1) % serviceImages.length
+      );
+    }, 10000);
+    return () => window.clearInterval(interval);
+  }, [serviceImages.length]);
+
+  const heroImage = serviceImages[currentImageIndex] || hero.image;
 
   return (
     <section
@@ -19,7 +36,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onOpenVideo }) => {
       className="relative bg-[#0d151c] text-white pt-12 pb-20 px-4 sm:px-8 lg:px-12 overflow-hidden min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)]"
     >
       <div className="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <div className="lg:col-span-6 flex flex-col items-start space-y-6 z-10">
+        <div className="lg:col-span-7 flex flex-col items-start space-y-6 z-10">
           <div className="inline-flex items-center gap-2 bg-[#18232c] border border-white/10 px-4 py-1.5 rounded-full text-xs font-semibold text-slate-300">
             <span>{hero.welcomeTag}</span>
           </div>
@@ -80,33 +97,28 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onOpenVideo }) => {
           </div>
         </div>
 
-        <div className="lg:col-span-6 relative flex flex-col items-center lg:items-end">
-          <div className="w-full max-w-lg flex flex-col">
-            <div className="mb-4 w-full bg-[#18232c] border border-white/15 px-5 py-2.5 rounded-full flex items-center gap-3 shadow-xl z-20">
-              <div className="w-6 h-6 rounded-full bg-[#2563eb] text-white flex items-center justify-center flex-shrink-0">
-                <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
-              </div>
-              <span className="text-xs sm:text-sm font-semibold text-slate-200 leading-snug">
-                {hero.floatingBadge}
-              </span>
-            </div>
-
-            <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
+        <div className="lg:col-span-5 relative flex flex-col items-center lg:items-end">
+          <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-white/10 group h-[24rem] sm:h-[30rem]">
+            {serviceImages.length > 0 ? (
+              serviceImages.map((image, index) => (
+                <img
+                  key={`${image}-${index}`}
+                  src={image}
+                  alt={`${content.brand.name} hero ${index + 1}`}
+                  referrerPolicy="no-referrer"
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out ${
+                    index === currentImageIndex ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              ))
+            ) : (
               <img
                 src={hero.image}
                 alt={`${content.brand.name} hero`}
                 referrerPolicy="no-referrer"
-                className="w-full h-auto object-cover transform group-hover:scale-102 transition-transform duration-500"
+                className="w-full h-full object-cover"
               />
-              <div className="absolute bottom-6 right-6 bg-[#2563eb] text-white p-5 sm:p-6 rounded-2xl shadow-2xl max-w-[170px] border border-white/20 transform hover:-translate-y-1 transition-transform">
-                <div className="text-4xl sm:text-5xl font-black tracking-tight leading-none mb-1 text-white">
-                  {hero.experienceNumber}
-                </div>
-                <p className="text-xs font-bold leading-tight uppercase tracking-wider text-blue-100">
-                  {hero.experienceLabel}
-                </p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
